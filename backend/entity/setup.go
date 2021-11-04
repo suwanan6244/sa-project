@@ -285,7 +285,7 @@ func SetupDatabase() {
 	})
 
 	db.Model(&Supplier{}).Create(&Supplier{
-		Name: "มทส.",
+		Name: "เกษตรกร",
 	})
 
 	// ระบบสั่งจองสินค้า
