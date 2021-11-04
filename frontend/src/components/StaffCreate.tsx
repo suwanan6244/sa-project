@@ -105,7 +105,7 @@ function StaffCreate() {
               color="primary"
               gutterBottom
             >
-              บันทึกข้อมูลสมาชิก
+              บันทึกข้อมูลพนักงาน
             </Typography>
           </Box>
         </Box>

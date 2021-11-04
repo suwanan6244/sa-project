@@ -68,7 +68,7 @@ function Staffs() {
               color="primary"
               gutterBottom
             >
-              ข้อมูลสมาชิก
+              ข้อมูลพนักงาน
             </Typography>
           </Box>
           <Box>

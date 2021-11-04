@@ -21,7 +21,7 @@ function Home() {
   return (
     <div>
       <Container className={classes.container} maxWidth="md">
-        <h1 style={{ textAlign: "center" }}>ระบบบันทึกการเข้าชมวีดีโอ</h1>
+        <h1 style={{ textAlign: "center" }}>ระบบคลังสินค้า</h1>
         <h4>Requirements</h4>
         <p>
         ระบบ Farm Mart เป็นระบบที่ไว้ใช้ซื้อสินค้าออนไลน์ซึ่งเป็นผลิตผลทางการเกษตร
