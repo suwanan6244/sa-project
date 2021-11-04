@@ -11,21 +11,11 @@ type User struct {
 	Name     string
 	Email    string `gorm:"uniqueIndex"`
 	Password string
-	// 1 user เป็นเจ้าของได้หลาย order
-	Orders []Order `gorm:"foreignKey:UserID"`
-	// 1 user เป็นเจ้าของได้หลาย return
-	Returns []Return `gorm:"foreignKey:OwnerID"`
-}
 
-type Order struct {
-	gorm.Model
-	// UserID ทำหน้าที่เป็น FK
-	UserID     *uint
-	User       User `gorm:"references:id"`
-	PreorderID int
-	StatusID   int
-	Ordertime  time.Time
-	Returns    []Return `gorm:"foreignKey:OrderID"`
+	Orders    []Order    `gorm:"foreignKey:UserID"`
+	Returns   []Return   `gorm:"foreignKey:OwnerID"`
+	Preorders []Preorder `gorm:"foreignKey:UserID"`
+	Accounts  []Account  `gorm:"foreignKey:OwnerID"`
 }
 
 type Staff struct {
@@ -35,6 +25,28 @@ type Staff struct {
 	Password      string
 	ProductStocks []ProductStock `gorm:"foreignKey:StaffID"`
 	Returns       []Return       `gorm:"foreignKey:StaffID"`
+}
+
+type Contact struct {
+	gorm.Model
+	Ctype    string
+	Accounts []Account `gorm:"foreignKey:ContactID"`
+}
+type Sex struct {
+	gorm.Model
+	Stype    string
+	Accounts []Account `gorm:"foreignKey:SexID"`
+}
+
+type Olduser struct {
+	gorm.Model
+	Otype    string
+	Accounts []Account `gorm:"foreignKey:OlduserID"`
+}
+type Religion struct {
+	gorm.Model
+	Rtype    string
+	Accounts []Account `gorm:"foreignKey:ReligionID"`
 }
 
 type Supplier struct {
@@ -53,46 +65,128 @@ type Product struct {
 	gorm.Model
 	Name string
 
-	// ProductTypeID ทำหน้าที่เป็น FK
 	ProductTypeID *uint
 	ProductType   ProductType    `gorm:"references:id"`
 	ProductStocks []ProductStock `gorm:"foreignKey:ProductID"`
 }
 
+type Status struct {
+	gorm.Model
+	Statusorder string
+
+	Orders []Order `gorm:"foreignKey:StatusID"`
+}
+
+type PaymentMethod struct {
+	gorm.Model
+	Method  string
+	Payment []Payment `gorm:"foreignKey:PaymentMethodID"`
+}
+
+type DeliveryType struct {
+	gorm.Model
+	Type    string
+	Payment []Payment `gorm:"foreignKey:DeliveryTypeID"`
+}
+
+//ระบบย่อย ระบบ
+type Account struct {
+	gorm.Model
+	Address    string
+	Province   string
+	OwnerID    *uint
+	Owner      User `gorm:"references:id"`
+	ContactID  *uint
+	Contact    Contact `gorm:"references:id"`
+	SexID      *uint
+	Sex        Sex `gorm:"references:id"`
+	OlduserID  *uint
+	Olduser    Olduser `gorm:"references:id"`
+	ReligionID *uint
+	Religion   Religion `gorm:"references:id"`
+}
+
+//ระบบย่อย ระบบสั่งจองสินค้า
+type Preorder struct {
+	gorm.Model
+	Amount int
+
+	UserID *uint
+	User   User `gorm:"references:id"`
+
+	ProductID *uint
+	Product   Product `gorm:"references:id"`
+
+	PaymentMethodID *uint
+	PaymentMethod   PaymentMethod `gorm:"references:id"`
+}
+
+//ระบบย่อย ระบบสั่งซื้อสินค้า
+type Order struct {
+	gorm.Model
+	OrderTime time.Time
+
+	UserID *uint
+	User   User `gorm:"references:id"`
+
+	PreorderID *uint
+	Preorder   Preorder `gorm:"references:id"`
+
+	StatusID *uint
+	Status   Status `gorm:"references:id"`
+
+	Payment []Payment `gorm:"foreignKey:OrderID"`
+	Returns []Return  `gorm:"foreignKey:OrderID"`
+}
+
+//ระบบย่อย ระบบคลังสินค้า
 type ProductStock struct {
 	gorm.Model
 
 	Price  int
 	Amount int
-	// ProductID ทำหน้าที่เป็น FK
+
 	ProductID *uint
 	Product   Product `gorm:"references:id"`
 
-	// SupplierID  ทำหน้าที่เป็น FK
 	SupplierID *uint
 	Supplier   Supplier `gorm:"references:id"`
 
-	// StaffID ทำหน้าที่เป็น FK
 	StaffID *uint
 	Staff   Staff `gorm:"references:id"`
 
 	ProductTime time.Time
 }
 
+//ระบบย่อย ระบบขอคืนสินค้า
 type Return struct {
 	gorm.Model
-	// OwnerID ทำหน้าที่เป็น FK
 	OwnerID *uint
 	Owner   User `gorm:"references:id"`
 
-	// OderID ทำหน้าที่เป็น FK
 	OrderID *uint
 	Order   Order `gorm:"references:id"`
 
-	// StaffID ทำหน้าที่เป็น FK
 	StaffID *uint
 	Staff   Staff `gorm:"references:id"`
 
 	Reason     string
 	Returndate time.Time
+}
+
+//ระบบย่อย ระบบการชำระเงิน
+type Payment struct {
+	gorm.Model
+	Phone       string
+	Price       float32
+	PaymentTime time.Time
+
+	OrderID *uint
+	Order   Order `gorm:"references:id"`
+
+	PaymentMethodID *uint
+	PaymentMethod   PaymentMethod `gorm:"references:id"`
+
+	DeliveryTypeID *uint
+	DeliveryType   DeliveryType `gorm:"references:id"`
 }
