@@ -89,7 +89,7 @@ type DeliveryType struct {
 	Payment []Payment `gorm:"foreignKey:DeliveryTypeID"`
 }
 
-//ระบบย่อย ระบบ
+//ระบบย่อย ระบบสมาชิก
 type Account struct {
 	gorm.Model
 	Address    string

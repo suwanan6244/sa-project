@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import {
@@ -22,6 +22,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Button from "@material-ui/core/Button";
+import { Grid } from "@material-ui/core";
 
 import HomeIcon from "@material-ui/icons/Home";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -33,6 +34,7 @@ import StaffCreate from "./components/StaffCreate";
 import ProductStocks from "./components/ProductStocks";
 import ProductStockCreate from "./components/ProductStockCreate";
 import SignIn from "./components/SignIn";
+import { StaffsInterface } from "./models/IStaff";
 
 const drawerWidth = 240;
 
@@ -108,6 +110,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function MiniDrawer() {
+  const [staffs, setStaffs] = useState<Partial<StaffsInterface>>({});
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -126,7 +129,30 @@ export default function MiniDrawer() {
     { name: "คลังสินค้า", icon: <SaveIcon />, path: "/product_stocks" },
   ];
 
+  const apiUrl = "http://localhost:8080";
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  const getStaffs = async () => {
+    let uid = localStorage.getItem("uid");
+    fetch(`${apiUrl}/staff/${uid}`, requestOptions)
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.data) {
+          setStaffs(res.data);
+        } else {
+          console.log("else");
+        }
+      });
+  };
+
   useEffect(() => {
+    getStaffs()
     const token = localStorage.getItem("token");
     if (token) {
       setToken(token);
@@ -167,8 +193,15 @@ export default function MiniDrawer() {
                   <MenuIcon />
                 </IconButton>
                 <Typography variant="h6" className={classes.title}>
-                  System Analysis and Design
+                  Farm Mart
                 </Typography>
+
+                <Grid item xs={2}>
+                  <Typography className={classes.title}>
+                    {staffs?.Email}
+                  </Typography>
+                </Grid>
+
                 <Button color="inherit" onClick={signout}>
                   ออกจากระบบ
                 </Button>
@@ -219,10 +252,7 @@ export default function MiniDrawer() {
               <Route exact path="/staffs" component={Staffs} />
               <Route exact path="/staff/create" component={StaffCreate} />
               <Route exact path="/product_stocks" component={ProductStocks} />
-              <Route
-                exact
-                path="/product_stock/create"
-                component={ProductStockCreate}
+              <Route exact path="/product_stock/create" component={ProductStockCreate}
               />
             </Switch>
           </div>

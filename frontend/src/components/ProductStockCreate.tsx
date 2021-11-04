@@ -244,7 +244,7 @@ function ProductStockCreate() {
               </Select>
             </FormControl>
           </Grid>
-         <Grid item xs={2}>
+         <Grid item xs={3}>
            <FormControl fullWidth variant="outlined">
            <p>ราคา</p>
 
@@ -273,7 +273,7 @@ function ProductStockCreate() {
             />
            </FormControl>
          </Grid>
-         <Grid item xs={2}>
+         <Grid item xs={3}>
            <FormControl fullWidth variant="outlined">
            <p>จำนวน</p>
 

@@ -23,76 +23,71 @@ func SetupDatabase() {
 
 	// Migrate the schema
 	database.AutoMigrate(
-
-		// สมาชิก
 		&User{},
 		&Olduser{},
 		&Contact{},
 		&Sex{},
 		&Religion{},
 		&Account{},
-
-		// ระบบสั่งจองสินค้า
 		&Preorder{},
-
-		// ระบบสั่งสินค้า
-		&Order{},
-		&Status{},
-
-		// ระบบจ่ายเงิน
 		&PaymentMethod{},
 		&Payment{},
 		&DeliveryType{},
-
-		// ระบบขอคืนสินค้า
 		&Return{},
-
-		// ระบบคลังสินค้า
 		&Staff{},
 		&Product{},
 		&ProductType{},
 		&Supplier{},
 		&ProductStock{},
+		&Order{},
+		&Status{},
 	)
 	db = database
 
 	password, err := bcrypt.GenerateFromPassword([]byte("123456"), 14)
 
-	// ข้อมูล user
+	// User Data
 	db.Model(&User{}).Create(&User{
-		Name:     "Narudee",
-		Email:    "narudee@gmail.com",
+		Name:     "Pawarit Praneetponkrang",
+		Email:    "prawarit@gmail.com",
 		Password: string(password),
 	})
 
 	db.Model(&User{}).Create(&User{
-		Name:     "Phatcha",
+		Name:     "Phatcha  Srisuwo",
 		Email:    "phatcha@gmail.com",
 		Password: string(password),
 	})
 
 	db.Model(&User{}).Create(&User{
-		Name:     "Patnarin",
-		Email:    "patnarin@gmail.com",
+		Name:     "Narudee Arunno",
+		Email:    "narudee@gmail.com",
 		Password: string(password),
 	})
 
 	db.Model(&User{}).Create(&User{
-		Name:     "name",
-		Email:    "name@example.com",
+		Name:     "Nawamin Saengsaikaew",
+		Email:    "nawamin@gmail.com",
 		Password: string(password),
 	})
 
-	var narudee User
-	var phatcha User
-	var patnarin User
-	var name User
-	db.Raw("SELECT * FROM users WHERE email = ?", "narudee@gmail.com").Scan(&narudee)
-	db.Raw("SELECT * FROM users WHERE email = ?", "phatcha@gmail.com").Scan(&phatcha)
-	db.Raw("SELECT * FROM users WHERE email = ?", "patnarin@gmail.com").Scan(&patnarin)
-	db.Raw("SELECT * FROM users WHERE email = ?", "name@example.com").Scan(&name)
+	db.Model(&User{}).Create(&User{
+		Name:     "Patnarin Aiewchoei",
+		Email:    "patnarin@gmail.com",
+		Password: string(password),
+	})
 
-	// ระบบชำระเงิน
+	var prawarit User
+	var phatcha User
+	var narudee User
+	var nawamin User
+	var patnarin User
+	db.Raw("SELECT * FROM users WHERE email = ?", "prawarit@gmail.com").Scan(&prawarit)
+	db.Raw("SELECT * FROM users WHERE email = ?", "phatcha@gmail.com").Scan(&phatcha)
+	db.Raw("SELECT * FROM users WHERE email = ?", "narudee@gmail.com").Scan(&narudee)
+	db.Raw("SELECT * FROM users WHERE email = ?", "nawamin@gmail.com").Scan(&nawamin)
+	db.Raw("SELECT * FROM users WHERE email = ?", "patnarin@gmail.com").Scan(&patnarin)
+
 	// PaymentMethod Data
 	Method1 := PaymentMethod{
 		Method: "Bank",
@@ -121,12 +116,11 @@ func SetupDatabase() {
 	db.Model(&DeliveryType{}).Create(&type1)
 
 	type2 := DeliveryType{
-		Type: "จัดส่งตามที่อยู่ในระบบ",
+		Type: "จัดส่งถึงบ้าน",
 	}
 	db.Model(&DeliveryType{}).Create(&type2)
 
-	// ระบบคลังสินค้า
-	// staff data
+	// Staff data
 	var suwanan Staff
 	var kanyanat Staff
 	var sirilak Staff
@@ -178,7 +172,7 @@ func SetupDatabase() {
 	}
 	db.Model(&ProductType{}).Create(&another)
 
-	// --- Product Data
+	// Product Data
 	mango := Product{
 		Name:        "มะม่วงน้ำดอกไม้",
 		ProductType: fruit,
@@ -202,12 +196,6 @@ func SetupDatabase() {
 		ProductType: fruit,
 	}
 	db.Model(&Product{}).Create(&durian)
-
-	egg := Product{
-		Name:        "ไข่ไก่ No.0",
-		ProductType: another,
-	}
-	db.Model(&Product{}).Create(&egg)
 
 	egg_omega := Product{
 		Name:        "ไข่ไก่ OMEGA-3",
@@ -233,24 +221,6 @@ func SetupDatabase() {
 	}
 	db.Model(&Product{}).Create(&milk)
 
-	milk_banana := Product{
-		Name:        "นมรสกล้วย 150 ml",
-		ProductType: drink,
-	}
-	db.Model(&Product{}).Create(&milk_banana)
-
-	milk_lychee := Product{
-		Name:        "นมรสลิ้นจี่ 150 ml",
-		ProductType: drink,
-	}
-	db.Model(&Product{}).Create(&milk_lychee)
-
-	milk_melon := Product{
-		Name:        "นมรสเมล่อน 150 ml",
-		ProductType: drink,
-	}
-	db.Model(&Product{}).Create(&milk_melon)
-
 	pork := Product{
 		Name:        "เนื้อหมู",
 		ProductType: meat,
@@ -263,19 +233,13 @@ func SetupDatabase() {
 	}
 	db.Model(&Product{}).Create(&turkey)
 
-	water350 := Product{
-		Name:        "น้ำดื่ม ขนาด 350 ซีซี 12 ขวด",
-		ProductType: drink,
-	}
-	db.Model(&Product{}).Create(&water350)
-
 	water600 := Product{
 		Name:        "น้ำดื่ม ขนาด 600 ซีซี 12 ขวด",
 		ProductType: drink,
 	}
 	db.Model(&Product{}).Create(&water600)
 
-	// --- Supplier Data
+	// Supplier Data
 	db.Model(&Supplier{}).Create(&Supplier{
 		Name: "มทส.",
 	})
@@ -285,42 +249,9 @@ func SetupDatabase() {
 	})
 
 	db.Model(&Supplier{}).Create(&Supplier{
-		Name: "เกษตรกร",
+		Name: "เกษตกร",
 	})
 
-	// ระบบสั่งจองสินค้า
-	preorder1 := Preorder{
-		Amount:        2,
-		User:          narudee,
-		Product:       durian,
-		PaymentMethod: Method1,
-	}
-	db.Model(&Preorder{}).Create(&preorder1)
-
-	preorder2 := Preorder{
-		Amount:        1,
-		User:          phatcha,
-		Product:       mango,
-		PaymentMethod: Method2,
-	}
-
-	preorder3 := Preorder{
-		Amount:        1,
-		User:          narudee,
-		Product:       turkey,
-		PaymentMethod: Method1,
-	}
-	db.Model(&Preorder{}).Create(&preorder3)
-
-	preorder4 := Preorder{
-		Amount:        2,
-		User:          phatcha,
-		Product:       milk_banana,
-		PaymentMethod: Method2,
-	}
-	db.Model(&Preorder{}).Create(&preorder4)
-
-	// ระบบสั่งสินค้า
 	// Status Data
 	status1 := Status{
 		Statusorder: "Confirm",
@@ -328,47 +259,11 @@ func SetupDatabase() {
 	db.Model(&Status{}).Create(&status1)
 
 	status2 := Status{
-		Statusorder: "not sure",
+		Statusorder: "Not sure",
 	}
 	db.Model(&Status{}).Create(&status2)
 
-	// Order data
-	order1 := Order{
-		User:      narudee,
-		Preorder:  preorder1,
-		Status:    status1,
-		OrderTime: time.Now(),
-	}
-
-	db.Model(&Order{}).Create(&order1)
-
-	order2 := Order{
-		User:      phatcha,
-		Preorder:  preorder2,
-		Status:    status1,
-		OrderTime: time.Now(),
-	}
-	db.Model(&Order{}).Create(&order2)
-
-	order3 := Order{
-		User:      narudee,
-		Preorder:  preorder3,
-		Status:    status1,
-		OrderTime: time.Now(),
-	}
-
-	db.Model(&Order{}).Create(&order3)
-
-	order4 := Order{
-		User:      phatcha,
-		Preorder:  preorder4,
-		Status:    status1,
-		OrderTime: time.Now(),
-	}
-	db.Model(&Order{}).Create(&order4)
-
-	// ระบบสมาชิก
-	// --- ContactType Data
+	// ContactType Data
 	email := Contact{
 		Ctype: "Email",
 	}
@@ -427,18 +322,17 @@ func SetupDatabase() {
 	}
 	db.Model(&Religion{}).Create(&Another)
 
-	// Account 1
+	// Account Data
 	db.Model(&Account{}).Create(&Account{
-		Address:  "10 M.22 T.Suranaree A.Mueng",
+		Address:  "Suranaree U. A.Mueng",
 		Province: "Nakhonratchasrima",
-		Owner:    name,
+		Owner:    prawarit,
 		Contact:  phone,
-		Sex:      female,
+		Sex:      male,
 		Olduser:  yet,
-		Religion: christianity,
+		Religion: buddhism,
 	})
 
-	// Account 2
 	db.Model(&Account{}).Create(&Account{
 		Address:  "Suranaree U. A.Mueng",
 		Province: "Nakhonratchasrima",
@@ -446,10 +340,29 @@ func SetupDatabase() {
 		Contact:  phone,
 		Sex:      female,
 		Olduser:  yet,
+		Religion: christianity,
+	})
+
+	db.Model(&Account{}).Create(&Account{
+		Address:  "Suranaree U. A.Mueng",
+		Province: "Nakhonratchasrima",
+		Owner:    narudee,
+		Contact:  phone,
+		Sex:      female,
+		Olduser:  yet,
 		Religion: buddhism,
 	})
 
-	// Account 3
+	db.Model(&Account{}).Create(&Account{
+		Address:  "Suranaree U. A.Mueng",
+		Province: "Nakhonratchasrima",
+		Owner:    nawamin,
+		Contact:  post,
+		Sex:      male,
+		Olduser:  yet,
+		Religion: buddhism,
+	})
+
 	db.Model(&Account{}).Create(&Account{
 		Address:  "Suranaree U. A.Mueng",
 		Province: "Nakhonratchasrima",
@@ -457,18 +370,168 @@ func SetupDatabase() {
 		Contact:  email,
 		Sex:      female,
 		Olduser:  yet,
-		Religion: buddhism,
+		Religion: christianity,
 	})
 
-	// Account 3
-	db.Model(&Account{}).Create(&Account{
-		Address:  "Suranaree U. A.Mueng",
-		Province: "Nakhonratchasrima",
-		Owner:    narudee,
-		Contact:  post,
-		Sex:      female,
-		Olduser:  yet,
-		Religion: buddhism,
-	})
+	// Preorder Data
+	pre1ofprawarit := Preorder{
+		Amount:        3,
+		User:          prawarit,
+		Product:       durian,
+		PaymentMethod: Method1,
+	}
+	db.Model(&Preorder{}).Create(&pre1ofprawarit)
 
+	pre2ofprawarit := Preorder{
+		Amount:        3,
+		User:          prawarit,
+		Product:       mango,
+		PaymentMethod: Method2,
+	}
+	db.Model(&Preorder{}).Create(&pre2ofprawarit)
+
+	pre1ofnawamin := Preorder{
+		Amount:        4,
+		User:          nawamin,
+		Product:       durian,
+		PaymentMethod: Method3,
+	}
+	db.Model(&Preorder{}).Create(&pre1ofnawamin)
+
+	pre1ofphatcha := Preorder{
+		Amount:        5,
+		User:          phatcha,
+		Product:       durian,
+		PaymentMethod: Method1,
+	}
+	db.Model(&Preorder{}).Create(&pre1ofphatcha)
+
+	pre2ofphatcha := Preorder{
+		Amount:        1,
+		User:          phatcha,
+		Product:       rambutan,
+		PaymentMethod: Method2,
+	}
+	db.Model(&Preorder{}).Create(&pre2ofphatcha)
+
+	pre3ofphatcha := Preorder{
+		Amount:        2,
+		User:          phatcha,
+		Product:       pork,
+		PaymentMethod: Method3,
+	}
+	db.Model(&Preorder{}).Create(&pre3ofphatcha)
+
+	pre1ofnarudee := Preorder{
+		Amount:        8,
+		User:          narudee,
+		Product:       milk,
+		PaymentMethod: Method2,
+	}
+	db.Model(&Preorder{}).Create(&pre1ofnarudee)
+
+	pre2ofnarudee := Preorder{
+		Amount:        5,
+		User:          narudee,
+		Product:       mango,
+		PaymentMethod: Method3,
+	}
+	db.Model(&Preorder{}).Create(&pre2ofnarudee)
+
+	pre3ofnarudee := Preorder{
+		Amount:        2,
+		User:          narudee,
+		Product:       durian,
+		PaymentMethod: Method3,
+	}
+	db.Model(&Preorder{}).Create(&pre3ofnarudee)
+
+	pre1ofpatnarin := Preorder{
+		Amount:        4,
+		User:          patnarin,
+		Product:       milk,
+		PaymentMethod: Method1,
+	}
+	db.Model(&Preorder{}).Create(&pre1ofpatnarin)
+
+	pre2ofpatnarin := Preorder{
+		Amount:        4,
+		User:          patnarin,
+		Product:       sunflower_sprout,
+		PaymentMethod: Method2,
+	}
+	db.Model(&Preorder{}).Create(&pre2ofpatnarin)
+
+	pre3ofpatnarin := Preorder{
+		Amount:        4,
+		User:          patnarin,
+		Product:       durian,
+		PaymentMethod: Method3,
+	}
+	db.Model(&Preorder{}).Create(&pre3ofpatnarin)
+
+	pre4ofpatnarin := Preorder{
+		Amount:        6,
+		User:          patnarin,
+		Product:       egg_omega,
+		PaymentMethod: Method4,
+	}
+	db.Model(&Preorder{}).Create(&pre4ofpatnarin)
+
+	// Order data
+	order1 := Order{
+		User:      prawarit,
+		Preorder:  pre1ofprawarit,
+		Status:    status1,
+		OrderTime: time.Now(),
+	}
+	db.Model(&Order{}).Create(&order1)
+
+	order2 := Order{
+		User:      phatcha,
+		Preorder:  pre1ofphatcha,
+		Status:    status2,
+		OrderTime: time.Now(),
+	}
+	db.Model(&Order{}).Create(&order2)
+
+	order3 := Order{
+		User:      phatcha,
+		Preorder:  pre1ofphatcha,
+		Status:    status2,
+		OrderTime: time.Now(),
+	}
+	db.Model(&Order{}).Create(&order3)
+
+	order4 := Order{
+		User:      narudee,
+		Preorder:  pre2ofnarudee,
+		Status:    status1,
+		OrderTime: time.Now(),
+	}
+	db.Model(&Order{}).Create(&order4)
+
+	order5 := Order{
+		User:      narudee,
+		Preorder:  pre2ofnarudee,
+		Status:    status1,
+		OrderTime: time.Now(),
+	}
+	db.Model(&Order{}).Create(&order5)
+
+	order6 := Order{
+		User:      patnarin,
+		Preorder:  pre1ofpatnarin,
+		Status:    status1,
+		OrderTime: time.Now(),
+	}
+	db.Model(&Order{}).Create(&order6)
+
+	order7 := Order{
+		User:      patnarin,
+		Preorder:  pre2ofpatnarin,
+		Status:    status1,
+		OrderTime: time.Now(),
+	}
+	db.Model(&Order{}).Create(&order7)
 }
