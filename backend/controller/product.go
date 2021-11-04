@@ -11,29 +11,16 @@ import (
 // POST /products
 func CreateProduct(c *gin.Context) {
 	var product entity.Product
-	var producttype entity.ProductType
-
 	if err := c.ShouldBindJSON(&product); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// 11: ค้นหา producttype ด้วย id
-	if tx := entity.DB().Where("id = ?", product.ProductTypeID).First(&producttype); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "producttype not found"})
-		return
-	}
-
-	// : สร้าง producttype
-	p := entity.Product{
-		ProductType: producttype, // โยงความสัมพันธ์กับ Entity ProductType
-	}
-
-	if err := entity.DB().Create(&p).Error; err != nil {
+	if err := entity.DB().Create(&product).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": p})
+	c.JSON(http.StatusOK, gin.H{"data": product})
 }
 
 // GET /product/:id

@@ -143,11 +143,11 @@ type Order struct {
 type ProductStock struct {
 	gorm.Model
 
-	Price  int
-	Amount int
-
 	ProductID *uint
 	Product   Product `gorm:"references:id"`
+
+	Price  int
+	Amount int
 
 	SupplierID *uint
 	Supplier   Supplier `gorm:"references:id"`
