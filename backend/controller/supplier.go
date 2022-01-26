@@ -77,3 +77,5 @@ func UpdateSupplier(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": supplier})
 }
+
+// ของตัวเอง

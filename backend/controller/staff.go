@@ -93,3 +93,5 @@ func DeleteStaff(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": id})
 }
+
+// ของตัวเอง
