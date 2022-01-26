@@ -8,6 +8,7 @@ import (
 )
 
 // POST /orders
+
 func CreateOrder(c *gin.Context) {
 	var order entity.Order
 	if err := c.ShouldBindJSON(&order); err != nil {
