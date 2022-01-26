@@ -11,6 +11,7 @@ import (
 
 func CreateOrder(c *gin.Context) {
 	var order entity.Order
+
 	if err := c.ShouldBindJSON(&order); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
